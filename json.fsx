@@ -15,6 +15,22 @@ for sib in info?siblings do
     printfn "%s" (sib.AsString())
 
 
-let webReq  = 
+let wbReq  = 
     "http://api.worldbank.org/country/cz/indicator/" + 
     "GC.DOD.TOTL.GD.ZS?format=json"
+
+let value =
+    JsonValue.Load(wbReq)
+
+match value with
+| JsonValue.Array [| info; data |] ->
+    let page, pages, total = info?page, info?pages, info?total
+    printfn
+        "Showing page %d of %d Total records %d"
+        (page.AsInteger()) (pages.AsInteger())  (total.AsInteger())
+
+    for record in data do
+        if record?value <> JsonValue.Null then
+            printfn "%d: %f" (record?date.AsInteger()) 
+                             (record?value.AsFloat())  
+| _ -> printf "failed"
