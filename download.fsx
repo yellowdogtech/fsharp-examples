@@ -15,8 +15,6 @@ let myCallback (reader:IO.StreamReader) url =
     printfn "Downloaded %s. First 1000 is %s" url html1000
     html
 
-
-
 let fetch = fetchUrl myCallback
 
 let sites = [
